@@ -10,18 +10,41 @@ class LED_blinker:
     redLED = LED(21)
     greenLED = LED(16)
     blueLED = LED(12)
+    sec = 0.375
 
+    #constructor
     def __init__(self):
         return
 
-    
+    #creates a single value from any list
     def concatenateList(self, list):
         result= ""
         for element in list:
             result += str(element)
         return result
 
+    #red led Blink
+    def redBlink(self):
+        self.redLED.on()
+        time.sleep(self.sec)
+        self.redLED.off()
+        time.sleep(self.sec)
 
+    #green led Blink
+    def greenBlink(self):
+        self.greenLED.on()
+        time.sleep(self.sec)
+        self.greenLED.off()
+        time.sleep(self.sec)
+
+    #blue led Blink
+    def blueBlink(self):
+        self.blueLED.on()
+        time.sleep(self.sec)
+        self.blueLED.off()
+        time.sleep(self.sec)
+
+    #Function that storage.py will call
     def displayStatus(self, bookAmt):
 
         amtList = list(map(int, str(bookAmt)))
@@ -52,28 +75,20 @@ class LED_blinker:
 
         for red in range(int(hundreds)):
             #light the red LED
-            self.redLED.on()
-            time.sleep(0.25)
-            self.redLED.off()
-            time.sleep(0.25)
+            self.redBlink()
 
         for green in range(int(tens)):
             #light the green LED
-            self.greenLED.on()
-            time.sleep(0.25)
-            self.greenLED.off()
-            time.sleep(0.25)
+            self.greenBlink()
 
         for blue in range(int(ones)):
             #light the blue LED
-            self.blueLED.on()
-            time.sleep(0.25)
-            self.blueLED.off()
-            time.sleep(0.25)
+            self.blueBlink()
 
 if __name__ == "__main__":
     print("This file encapsulates the LED functionality")
 
+    #testing the class
     obj = LED_blinker()
     
     obj.displayStatus(222)
