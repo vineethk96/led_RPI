@@ -84,6 +84,10 @@ class LED_blinker:
         for blue in range(int(ones)):
             #light the blue LED
             self.blueBlink()
+        
+        #delay before next LED call    
+        time.sleep(self.sec)
+        time.sleep(self.sec)
 
 if __name__ == "__main__":
     print("This file encapsulates the LED functionality")
