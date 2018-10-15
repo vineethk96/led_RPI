@@ -37,3 +37,6 @@ This file takes care of all LED functionality. The Storage.py file can access th
     * GPIO 21 : Red
     * GPIO 16 : Green
     * GPIO 12 : Blue
+
+### Pi Cobbler Part
+    https://www.adafruit.com/product/2029
