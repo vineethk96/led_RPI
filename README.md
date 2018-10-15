@@ -22,7 +22,7 @@ This file takes care of all LED functionality. The Storage.py file can access th
 4. blueBlink(self)
     * Used to make the Blue LED blink.
 5. displayStatus(self, bookAmt)
-    * Function that the Storage.py utilizes. Send in the "bookAmt" and the LED will blink as required.
+    * Function that the Storage.py utilizes. Send in the `bookAmt` and the LED will blink as required.
 
 ### Setup
 1. Plug the ribbon cable to the Assembled Pi Cobbler
