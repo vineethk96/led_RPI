@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import sys, argparse, bluetooth
 import lib
 
 if __name__ == "__main__":
