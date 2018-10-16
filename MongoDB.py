@@ -6,7 +6,6 @@ class DataBase:
     def __init__(self, host = None, port = None):
         if host is None and port is None:
             try:
-                print("trying to connect")
                 self.conn = MongoClient()
                 self.db = self.conn['db']
                 self.collection = self.db['collection']
@@ -32,23 +31,20 @@ class DataBase:
         if count < 1:
             book['stock'] = count
             rec_id = self.collection.insert_one(book)
-            print("Data inserted with rocord ids", rec_id)
-            cursor = self.collection.find()
-            for record in cursor:
-                print(record)
-            return "Success"
+
+            return rec_id.inserted_id
         else:
             return "Error: Book already exists"
             
     def buy_book(self, book, amt):
         record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})
         if record is not None:
-            print(record)
             stock = record['stock']
             stock += amount
             self.collection.update_one({'Name': book['Name'], 'Author': book['Author']},
                                        {"$set": {'stock': stock}})
-            return "Success"
+            record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})                           
+            return record
         else:
             return "Error: Book does not exist"
             
@@ -56,13 +52,13 @@ class DataBase:
     def sell_book(self, book, amt):
         record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})
         if record is not None:
-            print(record)
             stock = record['stock']
             if amt <= stock:
                 stock -= amount
                 self.collection.update_one({'Name': book['Name'], 'Author': book['Author']},
                                            {"$set": {'stock': stock}})
-                return "Success"
+                record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})                           
+                return record
             else:
                 return "Error: not enough books in stock"
         else:
@@ -72,6 +68,7 @@ class DataBase:
         record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})
         if record is not None:
             self.collection.delete_one({'Name': book['Name'], 'Author': book['Author']})
+            return "Success"
         else:
             return "Error: Book does not exist"
         
