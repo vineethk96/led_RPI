@@ -7,10 +7,16 @@ import json
 import pika
 import uuid
 
+from lib import print_checkpoint
+
+processorIP = ""
+
 #class was added on gitlab
 class rpcClient(object):
     def __init__(self):
-       self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        credentials = pika.PlainCredentials('vineeth', 'vineeth')
+        parameters = pika.ConnectionParameters(host=processorIP, credentials=credentials)
+        self.connection = pika.BlockingConnection(parameters)
 
         self.channel = self.connection.channel()
 
@@ -56,26 +62,33 @@ if __name__ == "__main__":
     processorIP = args.processor_ip
     action = args.action
     bookData = args.book
-    count = int(args.count)
+    count = args.count
 
     payload = {}
     msg = {}
 
-    if action == "ADD" || action == "DELETE" || action == "COUNT":
+    if (str(action) == 'ADD' or str(action) == 'DELETE' or str(action) == 'COUNT'):
         msg = {"Book Info" : bookData}
-        payload = {"Action" : asction, "Msg" : msg}
+        payload = {"Action" : action, "Msg" : msg}
+        print_checkpoint("Action is valid.")
 
-    elif action == "BUY" || action == "SELL":
+    elif (str(action) == "BUY" or str(action) == "SELL"):
         msg = {"Book Info": bookData, "Count": count}
         payload = {"Action": action, "Msg": msg}
+        print_checkpoint("Action is valid.")
 
-    elif action == "LIST":
+    elif (str(action) == "LIST"):
         payload = {"Action": action, "Msg": msg}
+        print_checkpoint("Action is valid.")
 
     else:
+        print_checkpoint("Error: Action is not valid.")
         #action is incorrect
         
     # added from gitlab
     client_rpc = rpcClient()
-    response = client_rpc.call(payload)
+    print_checkpoint("Request Payload: " + json.dumps(payload))
+    response = client_rpc.call(json.dumps(payload))
     # decipher payload
+
+    print_checkpoint("Response: " + json.loads(response))
