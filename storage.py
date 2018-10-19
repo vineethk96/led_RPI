@@ -5,10 +5,16 @@ import argparse
 import bluetooth
 from subprocess import check_output
 import json
+import threading
 
 from LED import LED_blinker
 from MongoDB import DataBase
 from lib import print_checkpoint
+
+#global database to be shared between two threads
+database = DataBase()
+#lock to control access to database between two threads
+db_lock = threading.Lock()
 
 def get_bluetooth_mac_addr():
     addr_info = str(check_output(["hcitool", "dev"]), "UTF-8")
@@ -43,8 +49,6 @@ class ProcessorConnection:
         msg = self.processor.recv(self.socket_size)
         print_checkpoint("Received Payload:", msg)
         msg_dict = json.loads(msg.decode("utf-8"))
-        #send_dict = { 'msg' : 'from storage' }
-        #self.processor.send(json.dumps(send_dict))
         return msg_dict
 
     def send_dict(self, msg):
@@ -60,29 +64,91 @@ class ProcessorConnection:
         if hasattr(self, 'processor'):
             self.processor.close()
 
-def process_commands():
+def process_commands(port, backlog, socket_size):
     ''' Function to process all queries/commands received from the processor
         over the Bluetooth connection. The database is queried accordingly and 
         sends the answer payload back to the processor through the Bluetooth
         connection.'''
     processor = ProcessorConnection(port, backlog, socket_size)
-    database = DataBase()
     while True:
         msg_dict = processor.receive_dict()
         answer_payload = {}
         action = msg_dict["Action"]
         msg = msg_dict["Msg"]
+
         if action == "ADD" or action == "DELETE" or action == "COUNT" or \
             action == "BUY" or action == "SELL":
             book_info = msg["Book Info"]
+            if action == "ADD":
+                db_lock.acquire()
+                book_id = database.add_book(book_info)
+                db_lock.release()
+                if isinstance(book_id, str) and book_id.contains("Error"):
+                    answer_payload["Msg"] = book_id
+                else:
+                    answer_payload["Msg"] = "OK: Successfully inserted. " + \
+                                            "Book id " + str(book_id)
+            elif action == "DELETE":
+                db_lock.acquire()
+                result = database.delete_book(book_info)
+                db_lock.release()
+                if result.contains("Error"):
+                    answer_payload["Msg"] = result
+                else:
+                    answer_payload["Msg"] = "OK: Successfully deleted " + \
+                                            str(book_info)
+            elif action == "COUNT":
+                db_lock.acquire()
+                count = database.count_book(book_info)
+                db_lock.release()
+                if count is None:
+                    answer_payload["Msg"] = "Error: Book does not exist. " + \
+                                            "Please add book first"
+                else:
+                    answer_payload["Msg"] = "OK: Count = " + int(count)
+            elif action == "BUY":
+                count = msg["Count"]
+                db_lock.acquire()
+                bought = database.buy_book(book_info, count)
+                db_lock.release()
+                if isinstance(bought, str) and sold.contains("Error"):
+                    answer_payload["Msg"] = bought
+                else:
+                    answer_payload["Msg"] = "Ok: " + str(book_info) + \
+                                            "Stock: " + bought['stock']
+            elif action == "SELL":
+                count = msg["Count"]
+                db_lock.acquire()
+                sold = database.buy_book(book_info, count)
+                db_lock.release()
+                if isinstance(sold, str) and sold.contains("Error"):
+                    answer_payload["Msg"] = sold
+                else:
+                    answer_payload["Msg"] = "Ok: " + str(book_info) + \
+                                            "Stock: " + sold['stock']
+                                            
         elif action == "LIST":
-            pass
+            db_lock.acquire()
+            book_list = database.list_books()
+            db_lock.release()
+            answer_payload["Msg"] = "Ok: " + len(book_list)
+            answer_payload["Books"] = book_list
         else:
             answer_payload["Msg"] = "Error: Action is not valid."
-            processor.send_dict(answer_payload)
-            continue
-            
 
+        processor.send_dict(answer_payload)
+            
+def blink_leds():
+    ''' Function to control LEDs to show number of different books in the 
+        inventory.'''
+    blinker = LED_blinker()
+    while True:
+        db_lock.acquire()
+        num_book_varieties = len(database.list_books())
+        db_lock.release()
+        blinker.displayStatus(num_book_varieties)
+        
+     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Manage book inventory")
     parser.add_argument('-p', metavar='Port Number', type=int, required=True,
@@ -95,9 +161,12 @@ if __name__ == "__main__":
     port = args.p
     backlog = args.b
     socket_size = args.z
-    processor = ProcessorConnection(port, backlog, socket_size)
-    while True:
-        msg = processor.receive_dict()
-        print(msg)
-
+    
+    t1 = threading.Thread(target=process_commands, 
+                          args=(port, backlog, socket_size))
+    t2 = threading.Thread(target=blink_leds)
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
 

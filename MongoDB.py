@@ -40,7 +40,7 @@ class DataBase:
         record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})
         if record is not None:
             stock = record['stock']
-            stock += amount
+            stock += amt
             self.collection.update_one({'Name': book['Name'], 'Author': book['Author']},
                                        {"$set": {'stock': stock}})
             record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})                           
@@ -54,7 +54,7 @@ class DataBase:
         if record is not None:
             stock = record['stock']
             if amt <= stock:
-                stock -= amount
+                stock -= amt
                 self.collection.update_one({'Name': book['Name'], 'Author': book['Author']},
                                            {"$set": {'stock': stock}})
                 record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})                           
