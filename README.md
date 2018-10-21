@@ -6,6 +6,16 @@
 Vineeth Kirandumkara
 
 ## processor.py
+### Description
+This file runs on the processor RPi to connect communications between the client RPi and the server RPi
+### Structure
+This program contains two classes:
+1. BTConnect
+    *Handles the Bluetooth communication between the processer and the server
+2. RPCServer
+    *Acts as the RabbitMQ server to communicate with the client
+
+The BTConnect instance is created within the RPCServer. It communicates with the server in the ```on_request``` function within the RPCServer class.
 
 ### Author
 Mohammad Aarij
@@ -58,6 +68,8 @@ The ```book``` argument is taken in as a dictionary.
 5. del_book(book)
     * Deletes the specified book.
     * Returns an error if the book does not exist in the database.
+6. list_books()
+    * Returns a list of all books in the collection.
 
 ### Author
 Mohammad Aarij
