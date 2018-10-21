@@ -1,4 +1,4 @@
-# Assignment 2 Team 19
+# Assignment 2 Team 7
 
 ## Library Used
 ### client.py
