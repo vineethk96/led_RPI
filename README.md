@@ -1,11 +1,57 @@
-# Assignment 2 Team 19
+# Assignment 2 Team 7
+
+## Library Used
+### client.py
+1. sys
+2. argparse
+3. json
+4. pika
+5. uuid
+
+### processor.py
+1. sys
+2. argparse
+3. json
+4. pika
+5. bluetooth
+
+### storage.py
+1. sys
+2. argparse
+3. json
+4. bluetooth
+5. subprocess
+6. threading
+
+### MongoDB.py
+1. sys
+2. pymongo
+
+### LED.py
+1. RPi.GPIO
+2. time
+3. gpiozero
+
+### lib.py
+1. datetime
+
 
 ## client.py
-
 ### Author
 Vineeth Kirandumkara
+### Description
+This file runs on the client RPi to read in the users desired command, and sends a dictionary of values to the processor. It will also print the results of the request to the screen.
+### Structure
+1. rpcClient class
+    * Handles all RabbitMQ requests and response.
+2. argParse Function
+    * Establishes all the possible user inputs.
+3. Main Function
+    * Creates the appropriate dictionary, and sends the object to the RabbitMQ server. It will then print the response to the screen once a response is recieved.
 
 ## processor.py
+### Author
+Mohammad Aarij
 ### Description
 This file runs on the processor RPi to connect communications between the client RPi and the server RPi
 ### Structure
@@ -17,10 +63,9 @@ This program contains two classes:
 
 The BTConnect instance is created within the RPCServer. It communicates with the server in the ```on_request``` function within the RPCServer class.
 
-### Author
-Mohammad Aarij
-
 ## storage.py
+### Author
+Sajan Ronvelwala
 ### Description
 This file is the highest-level application that runs on the server RPi to 
 respond to queries.
@@ -41,19 +86,14 @@ thus a mutex is used to make it thread-safe.
 For more information about this program, open a Python3 interpreter prompt and
 type ```import storage```, followed by ```help(storage)```.
 
-### Author
-Sajan Ronvelwala
-
 ## MongoDB.py
-
+### Author
+Mohammad Aarij
 ### Description
 This file contains the DataBase() class that storage.py uses to interface with MongoDB.
-
 ### Usage
-
 The hostname and port number are taken in as arguments, but are set for local hosting by default. An example of creating a local MongoDB connection using this class:
 ```example_db = DataBase()```
-
 ### DataBase Functions
 The ```book``` argument is taken in as a dictionary.
 1. count_book(book)
@@ -73,10 +113,9 @@ The ```book``` argument is taken in as a dictionary.
 6. list_books()
     * Returns a list of all books in the collection.
 
-### Author
-Mohammad Aarij
-
 ## LED.py
+### Author
+Vineeth Kirandumkara
 ### Description
 This file takes care of all LED functionality. The storage.py file can access the displayStatus function by sending the number of books as an argument, and the LED will blink the appropriate number of times.
 
@@ -109,8 +148,7 @@ This file takes care of all LED functionality. The storage.py file can access th
 ### Pi Cobbler Part
     https://www.adafruit.com/product/2029
     
-### Author
-Vineeth Kirandumkara
+
 
 ## lib.py
 
