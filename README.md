@@ -42,7 +42,7 @@ This file contains the DataBase() class that storage.py uses to interface with M
 The hostname and port number are taken in as arguments, but are set for local hosting by default. An example of creating a local MongoDB connection using this class:
 ```example_db = DataBase()```
 
-###DataBase Functions
+### DataBase Functions
 The ```book``` argument is taken in as a dictionary.
 1. count_book(book)
     * Counts stock number of a specified book.
