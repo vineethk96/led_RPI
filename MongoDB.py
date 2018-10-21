@@ -20,7 +20,8 @@ class DataBase:
                 self.collection = self.db['collection']
             except:
                 print("Could not connect to MongoDB")
-                
+    def __del__(self):
+        self.conn.drop_database('db')
 
     def count_book(self, book):
         record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})
