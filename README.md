@@ -1,6 +1,9 @@
 # Assignment 2 Team 19
 
 ## client.py
+### Description
+This file runs on the client RPi to read in the users desired command, and sends a dictionary of values to the processor. It will also run the 
+### Structure
 
 ### Author
 Vineeth Kirandumkara
