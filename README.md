@@ -2,8 +2,14 @@
 
 ## client.py
 ### Description
-This file runs on the client RPi to read in the users desired command, and sends a dictionary of values to the processor. It will also run the 
+This file runs on the client RPi to read in the users desired command, and sends a dictionary of values to the processor. It will also print the results of the request to the screen.
 ### Structure
+1. rpcClient class
+    * Handles all RabbitMQ requests and response.
+2. argParse Function
+    * Establishes all the possible user inputs.
+3. Main Function
+    * Creates the appropriate dictionary, and sends the object to the RabbitMQ server. It will then print the response to the screen once a response is recieved.
 
 ### Author
 Vineeth Kirandumkara
