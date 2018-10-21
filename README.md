@@ -1,16 +1,47 @@
-# assignment-2
+# Assignment 2 Team 19
 
-## Client.py
+## client.py
 
-## Processor.py
+### Author
+Vineeth Kirandumkara
 
-## Storage.py
+## processor.py
 
-## Mongo.py
+### Author
+Mohammad Aarij
+
+## storage.py
+### Description
+This file is the highest-level application that runs on the server RPi to 
+respond to queries.
+### Structure
+This program consists of two threads:
+1. Controls the GPIO pins to continuously show the book inventory count on an 
+   LED using the API defined in LED.py.  The book inventory count is retrieved
+   by using the API defined in MongoDB.py.
+2. Continuously retrieves queries/commands from the processor over a Bluetooth
+   connection, parses them, uses the API defined in MongoDB.py to modify the
+   book inventory according to the command/query, creates a response payload
+   according to the command/query, and sends the response payload back to the
+   processor over the Bluetooth connection.
+
+**Note:** Since both threads access the book inventory, it is a shared resource and
+thus a mutex is used to make it thread-safe.
+
+For more information about this program, open a Python3 interpreter prompt and
+type ```import storage```, followed by ```help(storage)```.
+
+### Author
+Sajan Ronvelwala
+
+## MongoDB.py
+
+### Author
+Mohammad Aarij
 
 ## LED.py
 ### Description
-This file takes care of all LED functionality. The Storage.py file can access the displayStatus function by sending the number of books as an argument, and the LED will blink the appropriate number of times.
+This file takes care of all LED functionality. The storage.py file can access the displayStatus function by sending the number of books as an argument, and the LED will blink the appropriate number of times.
 
 ### LED Class Functions
 1. ConcatenateList(self, list)
@@ -40,3 +71,6 @@ This file takes care of all LED functionality. The Storage.py file can access th
 
 ### Pi Cobbler Part
     https://www.adafruit.com/product/2029
+    
+### Author
+Vineeth Kirandumkara
