@@ -89,9 +89,8 @@ class LED_blinker:
         time.sleep(self.sec)
         time.sleep(self.sec)
 
-if __name__ == "__main__":
-    print("This file encapsulates the LED functionality")
 
+if __name__ == "__main__":
     #testing the class
     obj = LED_blinker()
     

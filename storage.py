@@ -137,17 +137,20 @@ def process_commands(port, backlog, socket_size):
             answer_payload["Msg"] = "Error: Action is not valid."
 
         processor.send_dict(answer_payload)
-            
+                
 def blink_leds():
     ''' Function to control LEDs to show number of different books in the 
         inventory.'''
     blinker = LED_blinker()
+    db_lock.acquire()
+    database.add_book({"Name" : "Test", "Author" : "Test"})
+    db_lock.release()
+ 
     while True:
         db_lock.acquire()
         num_book_varieties = len(database.list_books())
         db_lock.release()
         blinker.displayStatus(num_book_varieties)
-        
      
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Manage book inventory")
@@ -165,8 +168,13 @@ if __name__ == "__main__":
     t1 = threading.Thread(target=process_commands, 
                           args=(port, backlog, socket_size))
     t2 = threading.Thread(target=blink_leds)
-    t1.start()
-    t2.start()
-    t1.join()
-    t2.join()
+    
+    try:
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+    except BaseException:
+        pass
+    del(database)
 
