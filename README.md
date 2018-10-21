@@ -36,6 +36,29 @@ Sajan Ronvelwala
 
 ## MongoDB.py
 
+### Description
+This file contains the DataBase() class that storage.py uses to interface with MongoDB. 
+###Usage
+The hostname and port number are taken in as arguments, but are set for local hosting by default. An example of creating a local MongoDB connection using this class:
+```example_db = DataBase()```
+
+###DataBase Functions
+The ```book``` argument is taken in as a dictionary.
+1. count_book(book)
+    * Counts stock number of a specified book.
+2. add_book(book)
+    * Adds a database entry for the given book.
+    * Returns an error if there is already an entry for the book.
+3. buy_book(book, amt)
+    * Increases stock for specified book by given amount, ```amt```. 
+    * Returns an error if there is no database entry for the given book.
+4. sell_book(book, amt)
+    * Used after sales are made. Decreases stock for specified book by given amount, ```amt```. 
+    * Returns an error if there is no database entry for the given book or if there is not enough stock for the sale.
+5. del_book(book)
+    * Deletes the specified book.
+    * Returns an error if the book does not exist in the database.
+
 ### Author
 Mohammad Aarij
 
