@@ -1,5 +1,41 @@
 # Assignment 2 Team 19
 
+## Library Used
+### client.py
+1. sys
+2. argparse
+3. json
+4. pika
+5. uuid
+
+### processor.py
+1. sys
+2. argparse
+3. json
+4. pika
+5. bluetooth
+
+### storage.py
+1. sys
+2. argparse
+3. json
+4. bluetooth
+5. subprocess
+6. threading
+
+### MongoDB.py
+1. sys
+2. pymongo
+
+### LED.py
+1. RPi.GPIO
+2. time
+3. gpiozero
+
+### lib.py
+1. datetime
+
+
 ## client.py
 ### Author
 Vineeth Kirandumkara
