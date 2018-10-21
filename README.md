@@ -11,9 +11,9 @@ This file runs on the processor RPi to connect communications between the client
 ### Structure
 This program contains two classes:
 1. BTConnect
-    *Handles the Bluetooth communication between the processer and the server
+    * Handles the Bluetooth communication between the processer and the server
 2. RPCServer
-    *Acts as the RabbitMQ server to communicate with the client
+    * Acts as the RabbitMQ server to communicate with the client
 
 The BTConnect instance is created within the RPCServer. It communicates with the server in the ```on_request``` function within the RPCServer class.
 
@@ -47,8 +47,10 @@ Sajan Ronvelwala
 ## MongoDB.py
 
 ### Description
-This file contains the DataBase() class that storage.py uses to interface with MongoDB. 
-###Usage
+This file contains the DataBase() class that storage.py uses to interface with MongoDB.
+
+### Usage
+
 The hostname and port number are taken in as arguments, but are set for local hosting by default. An example of creating a local MongoDB connection using this class:
 ```example_db = DataBase()```
 
