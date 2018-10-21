@@ -74,3 +74,19 @@ This file takes care of all LED functionality. The storage.py file can access th
     
 ### Author
 Vineeth Kirandumkara
+
+## lib.py
+
+### Description
+
+This file serves as a central library with classes and functions that can be
+used by any of the RPi programs: client.py, processor.py, or storage.py.  
+Currently the file contains one function ```print_checkpoint(*msgs)``` which
+prints the given messages with the current timestamp appended before it.  This
+function essentially works the same as the built-in ```print``` function except
+that it appends the current timestamp at the beginning. This function makes it
+very easy to print checkpoints in a format that is consistent with the project
+specification and across all three RPi programs.
+
+### Author
+Sajan Ronvelwala
