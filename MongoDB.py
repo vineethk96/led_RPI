@@ -35,7 +35,7 @@ class DataBase:
 
             return rec_id.inserted_id
         else:
-            return "Error: Book already exists"
+            return "Error: Unable to add. Book already exists"
             
     def buy_book(self, book, amt):
         record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})
@@ -61,9 +61,9 @@ class DataBase:
                 record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})                           
                 return record
             else:
-                return "Error: not enough books in stock"
+                return "Error: stock is not enough"
         else:
-            return "Error: Book does not exist"
+            return "Error: Book does not exist. Please add book first"
 
     def delete_book(self, book):
         record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})
@@ -71,7 +71,7 @@ class DataBase:
             self.collection.delete_one({'Name': book['Name'], 'Author': book['Author']})
             return "Success"
         else:
-            return "Error: Book does not exist"
+            return "Error: Unable to delete. Book does not exist"
         
     def list_books(self):
         ret_array = list(self.collection.find())
