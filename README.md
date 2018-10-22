@@ -14,6 +14,7 @@
 3. json
 4. pika
 5. bluetooth
+6. struct
 
 ### storage.py
 1. sys
@@ -22,6 +23,7 @@
 4. bluetooth
 5. subprocess
 6. threading
+7. struct
 
 ### MongoDB.py
 1. sys
