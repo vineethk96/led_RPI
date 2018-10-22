@@ -5,7 +5,7 @@
 |:-:|:-:|:-:|:-:|:-:|:-:|
 |sys|sys|sys|sys|Rpi.GPIO|datetime|
 |argparse|argparse|argparse|pymongo|time|
-|json|json|gpiozero|
+|json|json|json||gpiozero|
 |pika|pika|bluetooth|
 |uuid|bluetooth|subprocess|
 ||struct|threading|
