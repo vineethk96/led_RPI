@@ -32,7 +32,7 @@ class DataBase:
     def add_book(self, book):
         count = self.collection.find({'Name': book['Name'], 'Author': book['Author']}).count()    
         if count < 1:
-            book['stock'] = count
+            book['stock'] = 0
             rec_id = self.collection.insert_one(book)
 
             return rec_id.inserted_id
