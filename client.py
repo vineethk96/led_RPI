@@ -11,7 +11,6 @@ from lib import print_checkpoint
 
 processorIP = ""
 
-#class was added on gitlab
 class rpcClient(object):
     def __init__(self):
         credentials = pika.PlainCredentials('vineeth', 'vineeth')
@@ -41,10 +40,8 @@ class rpcClient(object):
                                    body=str(n))
         while self.response is None:
             self.connection.process_data_events()
-        return int(self.response)
+        return self.response.decode()
         
-#***************************************************
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-proc", dest="processor_ip")
@@ -67,6 +64,8 @@ if __name__ == "__main__":
     payload = {}
     msg = {}
 
+    validAction = True
+
     if (str(action) == 'ADD' or str(action) == 'DELETE' or str(action) == 'COUNT'):
         msg = {"Book Info" : bookData}
         payload = {"Action" : action, "Msg" : msg}
@@ -83,12 +82,21 @@ if __name__ == "__main__":
 
     else:
         print_checkpoint("Error: Action is not valid.")
+        validAction = False
         #action is incorrect
-        
-    # added from gitlab
-    client_rpc = rpcClient()
-    print_checkpoint("Request Payload: " + json.dumps(payload))
-    response = client_rpc.call(json.dumps(payload))
-    # decipher payload
 
-    print_checkpoint("Response: " + json.loads(response))
+    if(validAction): 
+        # added from gitlab
+        client_rpc = rpcClient()
+        print_checkpoint("Request Payload: " + json.dumps(payload))
+        response = client_rpc.call(json.dumps(payload))
+        
+        # decipher payload
+        dictResp = json.loads(response)
+        print_checkpoint("Response: ", dictResp.get("Msg"))
+
+        if (str(action) == "LIST"):
+            print("ID\t\t\t\t" + "Stock\t" + "Name\t\t\t" + "Author\t\t\t")
+
+            for item in dictResp.get("Books"):
+                print(item["_id"] + "\t" + str(item["stock"]) + "\t" + item["Name"] + "\t" + item["Author"])
