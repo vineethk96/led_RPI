@@ -83,7 +83,7 @@ def process_commands(port, backlog, socket_size):
                 db_lock.acquire()
                 book_id = database.add_book(book_info)
                 db_lock.release()
-                if isinstance(book_id, str) and book_id.contains("Error"):
+                if (isinstance(book_id, str)) and ("Error" in book_id):
                     answer_payload["Msg"] = book_id
                 else:
                     answer_payload["Msg"] = "OK: Successfully inserted. " + \
@@ -92,7 +92,7 @@ def process_commands(port, backlog, socket_size):
                 db_lock.acquire()
                 result = database.delete_book(book_info)
                 db_lock.release()
-                if result.contains("Error"):
+                if "Error" in result:
                     answer_payload["Msg"] = result
                 else:
                     answer_payload["Msg"] = "OK: Successfully deleted " + \
@@ -105,33 +105,37 @@ def process_commands(port, backlog, socket_size):
                     answer_payload["Msg"] = "Error: Book does not exist. " + \
                                             "Please add book first"
                 else:
-                    answer_payload["Msg"] = "OK: Count = " + int(count)
+                    answer_payload["Msg"] = "OK: " + str(book_info) + \
+                                            "Stock: " + str(int(count))
             elif action == "BUY":
-                count = msg["Count"]
+                count = int(msg["Count"])
                 db_lock.acquire()
                 bought = database.buy_book(book_info, count)
                 db_lock.release()
-                if isinstance(bought, str) and sold.contains("Error"):
+                if (isinstance(bought, str)) and ("Error" in bought):
                     answer_payload["Msg"] = bought
                 else:
-                    answer_payload["Msg"] = "Ok: " + str(book_info) + \
-                                            "Stock: " + bought['stock']
+                    answer_payload["Msg"] = "OK: " + str(book_info) + \
+                                            "Stock: " + str(bought['stock'])
             elif action == "SELL":
-                count = msg["Count"]
+                count = int(msg["Count"])
                 db_lock.acquire()
                 sold = database.buy_book(book_info, count)
                 db_lock.release()
-                if isinstance(sold, str) and sold.contains("Error"):
+                if (isinstance(sold, str)) and ("Error" in sold):
                     answer_payload["Msg"] = sold
                 else:
-                    answer_payload["Msg"] = "Ok: " + str(book_info) + \
-                                            "Stock: " + sold['stock']
+                    answer_payload["Msg"] = "OK: " + str(book_info) + \
+                                            "Stock: " + str(sold['stock'])
                                             
         elif action == "LIST":
             db_lock.acquire()
             book_list = database.list_books()
             db_lock.release()
-            answer_payload["Msg"] = "Ok: " + len(book_list)
+            answer_payload["Msg"] = "Ok: Get " + str(len(book_list)) + \
+                                    " books' information."
+            for entry in book_list:
+                entry["_id"] = str(entry["_id"])
             answer_payload["Books"] = book_list
         else:
             answer_payload["Msg"] = "Error: Action is not valid."
@@ -142,10 +146,6 @@ def blink_leds():
     ''' Function to control LEDs to show number of different books in the 
         inventory.'''
     blinker = LED_blinker()
-    db_lock.acquire()
-    database.add_book({"Name" : "Test", "Author" : "Test"})
-    db_lock.release()
- 
     while True:
         db_lock.acquire()
         num_book_varieties = len(database.list_books())

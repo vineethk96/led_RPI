@@ -25,6 +25,8 @@ class DataBase:
 
     def count_book(self, book):
         record = self.collection.find_one({'Name': book['Name'], 'Author': book['Author']})
+        if record is None:
+            return None
         return record['stock']
     
     def add_book(self, book):
